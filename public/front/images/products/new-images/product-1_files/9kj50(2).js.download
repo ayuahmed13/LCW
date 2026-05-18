@@ -1,0 +1,43 @@
+(function($){
+"use strict";
+$(document).ready(function(){
+$('body').on('click','.sv-post-like',function(event){
+event.preventDefault();
+var heart=$(this);
+var post_id=heart.data("post_id");
+heart.html("<i class='icon-like'></i><i class='icon-gear'></i>");
+$.ajax({
+type: "post",
+url: ajax_var.url,
+data: "action=sv-post-like&nonce="+ajax_var.nonce+"&s7upf_post_like=&post_id="+post_id,
+success: function(count){
+if(count.indexOf("already")!==-1){
+var lecount=count.replace("already","");
+if(lecount==="0"){
+lecount="0";
+}
+heart.prop('title', 'Like');
+heart.removeClass("liked");
+heart.html("<i class='icon-unlike'></i><sup>"+lecount+"</sup>");
+}else{
+heart.prop('title', 'Unlike');
+heart.addClass("liked");
+heart.html("<i class='icon-like'></i><sup>"+count+"</sup>");
+}}
+});
+});
+});
+})(jQuery);
+jQuery('.wpsm-content').addClass('wpsm-content-hide')
+jQuery('.wpsm-show, .wpsm-hide').removeClass('wpsm-content-hide')
+jQuery('.wpsm-show').on('click', function(e){
+jQuery(this).next('.wpsm-content').removeClass('wpsm-content-hide');
+jQuery(this).addClass('wpsm-content-hide');
+e.preventDefault();
+});
+jQuery('.wpsm-hide').on('click', function(e){
+var wpsm=jQuery(this).parent('.wpsm-content');
+wpsm.addClass('wpsm-content-hide');
+wpsm.prev('.wpsm-show').removeClass('wpsm-content-hide');
+e.preventDefault();
+});

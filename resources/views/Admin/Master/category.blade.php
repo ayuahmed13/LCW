@@ -1,0 +1,96 @@
+@extends('Admin.Layouts.layout')
+@section('content')
+<div class="content-page">
+    <div class="content">
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="mb-2 justify-content-between d-flex align-items-center">
+                        <h4 class="header-title ">{{ !empty($edit_data) ? 'Edit' : 'Add' }} Category</h4>
+                    </div>
+                </div>
+
+
+                <div class="col-4">
+                    <div class="card department-card">
+                        <div class="card-body">
+
+                            <form id="categoryForm" name="categoryForm" action="{{url('admin/category-master/store')}}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="id" id="id" value="{{!empty($edit_data->id) ? Crypt::encrypt($edit_data->id) : ''}}">
+                                
+                                <div class="row">
+                                    <div class="mb-2 col-12">
+                                        <label for="" class="form-label required-field">Category Name</label>
+                                        <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Enter Category Name" value="{{!empty($edit_data->category_name) ? $edit_data->category_name : ''}}">
+
+                                    </div>
+                                        <div class="mb-2 col-12">
+                                            <label for="" class="form-label">Description</label>
+                                            <textarea type="text" rows="5" class="form-control summernote" id="category_description" name="category_description" value="">{{!empty($edit_data->category_description) ? $edit_data->category_description : ''}}</textarea>
+                                        </div>
+                                    <div class="mb-2 col-12">
+                                        <label for="" class="form-label required-field">Category Image</label>
+                                        <p class="text-gray mb-1">Note: Image Size-W(216px)*H(287px)</p>
+                                        <input type="file" data-plugins="dropify" name="category_image" size="40" accept="image/*"
+                                            data-default-file="{{ !empty($edit_data->category_image) && Storage::exists($edit_data->category_image) ? url('/').Storage::url($edit_data->category_image) : '' }}"
+                                            alt="{{ !empty($edit_data->category_image) ? $edit_data->category_image : '' }}" />
+                                        <input type="hidden" id="old_image" value="{{ !empty($edit_data->category_image) && Storage::exists($edit_data->category_image) ? url('/').Storage::url($edit_data->category_image) : '' }}" >
+                                        
+                                    </div>
+                                    <label id="category_image-error" class="text-danger" for="category_image"></label>
+
+                                </div>
+
+
+
+                                <button type="submit" name="contact_settings" id="btn-submit" class="btn btn-success"> {{ !empty($edit_data) ? 'Update' : 'Submit' }} </button>
+                                @if(empty($edit_data)) <button type="reset" class="btn btn-danger"> Cancel </button> @endif
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <!-- <div class="mb-2 justify-content-between d-flex align-items-center">
+                        <h4 class="mt-0 header-title">System User</h4>
+                        <a href="{{ url('admin/system-user/add') }}" class="btn btn-success waves-effect waves-light add-btn"><span class="btn-label"> <i class="fas fa-plus "></i></span>Add</a>
+                    </div> -->
+                    <div class="card">
+                        <div class="card-body table-responsive department-card">
+                            <table id="data-table" class="table table-bordered table-bordered dt-responsiv w-100 ">
+                                <thead class="table-light">
+                                    <tr role="row">
+                                        <th width="10%">Sr No</th>
+                                        <th>Category Name</th>
+                                        <th>Category Image</th>
+                                        <th width="10%">Status</th>
+                                        <th width="13%">Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div> <!-- container-fluid -->
+        </div>
+    </div>
+</div>
+    @endsection
+
+    @section('script')
+    <script>
+        $(".master").addClass("menuitem-active");
+        $("#master").addClass("show");
+        $(".category").addClass("menuitem-active");
+        $(".category a").addClass("active");
+    </script>
+    <script src="{{ asset('controller_js/cn_category_master.js') }}"></script>
+    @endsection
